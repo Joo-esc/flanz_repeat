@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1024909612716",
+    "project_id": "flanz-why",
+    "storage_bucket": "flanz-why.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024909612716:android:e7c51c6081cf0747d27109",
+        "android_client_info": {
+          "package_name": "oxhead.justjam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1024909612716-lk8b9im864s6c41gtbihjufnv2fjh79h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "oxhead.justjam",
+            "certificate_hash": "f31030ce516b6bf13e3821d6c73c0af540ebc8e6"
+          }
+        },
+        {
+          "client_id": "1024909612716-velijpg6c6n1rhu0luevdhlqa6797pot.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIV45FLS-7nISQVIqM1ixV0QgBtch2PcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1024909612716-velijpg6c6n1rhu0luevdhlqa6797pot.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
