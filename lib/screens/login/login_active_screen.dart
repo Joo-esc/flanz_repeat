@@ -1,3 +1,4 @@
+import 'package:justjam/home.dart';
 import 'package:justjam/provider/google_sign_in.dart';
 import 'package:justjam/screens/coffingnote/coffingnote_main_screen.dart';
 import 'package:justjam/screens/coupon/coupon_lists_screen.dart';
@@ -27,7 +28,7 @@ class LoginActivePage extends StatelessWidget {
         if (provider.isSignIn) {
           return buildLoading();
         } else if (snapshot.hasData) {
-          return HomeScreen();
+          return Home();
         } else if (snapshot.hasData == null) {
           return LoginMain();
         } else {

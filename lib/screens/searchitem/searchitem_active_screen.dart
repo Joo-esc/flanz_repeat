@@ -1,5 +1,6 @@
 import 'package:justjam/provider/NormalPaceSearch.dart';
 import 'package:justjam/provider/PlaceSearch.dart';
+import 'package:justjam/screens/searchitem/normal_place_detail_screen.dart';
 import 'package:justjam/screens/searchitem/search_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:justjam/utill/default.dart';
@@ -190,10 +191,10 @@ class _SearchItemActiveState extends State<SearchItemActive> {
                             child: GridView.builder(
                               padding: EdgeInsets.zero,
                               gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                  SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight(
                                       crossAxisCount: 1,
                                       mainAxisSpacing: 10,
-                                      childAspectRatio: 1.4),
+                                      height: 309),
                               itemCount: placeSearch.placeList.length,
                               itemBuilder: (context, index) {
                                 final place = placeSearch.placeList[index];
@@ -205,6 +206,12 @@ class _SearchItemActiveState extends State<SearchItemActive> {
                                   location: place.location,
                                   aim: place.aim,
                                   price: place.price,
+                                  onTap: () {
+                                    placeSearch.selectedPlace =
+                                        placeSearch.placeList[index];
+                                    Navigator.pushNamed(
+                                        context, SearchDetailScreen.id);
+                                  },
                                 );
                               },
                             ),
@@ -230,6 +237,13 @@ class _SearchItemActiveState extends State<SearchItemActive> {
                                   location: normal.place,
                                   aim: normal.aim,
                                   price: normal.price,
+                                  onTap: () {
+                                    normalPlaceSearch.selectedPlace =
+                                        normalPlaceSearch
+                                            .normalPlaceLists[index];
+                                    Navigator.pushNamed(context,
+                                        NormalPlaceSearchDetailScreen.id);
+                                  },
                                 );
                               },
                             ),
@@ -258,28 +272,21 @@ class SearchRightItemLists extends StatelessWidget {
     this.rating,
     this.reviewCount,
     this.aim,
+    this.onTap,
   }) : super(key: key);
   final String image, name, location, price;
   final int reviewCount, aim;
   final double rating;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          FlatButton(
-            onPressed: () {
-              print(aim);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SearchDetailScreen(value: aim),
-                ),
-              );
-              setState(hey) {}
-            },
-            child: Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        child: Column(
+          children: [
+            Container(
               child: Padding(
                 padding: const EdgeInsets.only(right: 5),
                 child: Column(
@@ -367,10 +374,10 @@ class SearchRightItemLists extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+        padding: EdgeInsets.only(top: 10, bottom: 0),
       ),
-      padding: EdgeInsets.only(top: 10, bottom: 0),
     );
   }
 }
@@ -385,28 +392,21 @@ class SearchItemLists extends StatelessWidget {
     this.rating,
     this.reviewCount,
     this.aim,
+    this.onTap,
   }) : super(key: key);
   final String image, name, location;
   final int price, reviewCount, aim;
   final double rating;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          FlatButton(
-            onPressed: () {
-              print(aim);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SearchDetailScreen(value: aim),
-                ),
-              );
-              setState(hey) {}
-            },
-            child: Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        child: Column(
+          children: [
+            Container(
               child: Padding(
                 padding: const EdgeInsets.only(right: 5),
                 child: Column(
@@ -501,10 +501,10 @@ class SearchItemLists extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+        padding: EdgeInsets.only(top: 10, bottom: 0),
       ),
-      padding: EdgeInsets.only(top: 10, bottom: 0),
     );
   }
 }

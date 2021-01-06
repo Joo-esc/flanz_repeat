@@ -64,5 +64,6 @@ class NormalPlaceSearch with ChangeNotifier {
 
   set normalPlaceLists(List<NormalPlace> value) {
     _normalPlaceLists = value;
+    notifyListeners();
   }
 }

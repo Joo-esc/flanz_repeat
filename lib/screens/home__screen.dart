@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/rendering.dart';
 import 'package:justjam/home.dart';
 import 'package:justjam/model/normalPlace.dart';
 import 'package:justjam/provider/NormalPaceSearch.dart';
@@ -14,14 +15,8 @@ import 'package:flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:justjam/utill/default.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_page_indicator/flutter_page_indicator.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:justjam/utill/default.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:ff_navigation_bar/ff_navigation_bar.dart';
-import 'package:justjam/screens/homeab.dart';
+import 'package:justjam/utill/item_lists.dart';
+
 import 'package:provider/provider.dart';
 
 //TODO 홈 화면 페이지
@@ -163,6 +158,7 @@ class HomeScreenWidget extends StatelessWidget {
                   //       child: Text(user.displayName),
                   //       ),
                   // ),
+
                   Container(
                     padding: EdgeInsets.only(left: 0),
                     width: double.infinity,
@@ -171,8 +167,7 @@ class HomeScreenWidget extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       primary: false,
                       itemCount: 2,
-                      itemBuilder: (context, index) =>
-                          Popup(popup: popupLists[index]),
+                      itemBuilder: (context, index) => popUpLists[index],
                     ),
                   ),
                   SizedBox(
@@ -257,9 +252,13 @@ class HomeScreenWidget extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Container(
-                            height: MediaQuery.of(context).size.height / 2,
-                            width: double.infinity,
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: double.infinity,
+                              maxHeight: 480,
+                              // maxHeight:
+                              //     MediaQuery.of(context).size.height * 0.6),
+                            ),
                             child: TabBarView(
                               children: [
                                 Container(
@@ -270,40 +269,31 @@ class HomeScreenWidget extends StatelessWidget {
                                         child: GridView.builder(
                                             padding: EdgeInsets.zero,
                                             gridDelegate:
-                                                SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              mainAxisSpacing: 10,
-                                              crossAxisSpacing: 10,
-                                              childAspectRatio: 0.76,
-                                            ),
-                                            itemCount:
-                                                placeSearch.placeList.length,
+                                                SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight(
+                                                    crossAxisCount: 2,
+                                                    crossAxisSpacing: 10,
+                                                    mainAxisSpacing: 10,
+                                                    height: 230),
+                                            itemCount: 4,
                                             physics:
                                                 NeverScrollableScrollPhysics(),
                                             scrollDirection: Axis.vertical,
                                             itemBuilder: (context, index) {
                                               final place =
                                                   placeSearch.placeList[index];
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  placeSearch.selectedPlace =
-                                                      placeSearch
-                                                          .placeList[index];
-                                                  Navigator.pushNamed(context,
-                                                      SearchDetailScreen.id);
-                                                },
-                                                child: Container(
-                                                  color: Colors.black,
-                                                ),
-                                              );
-
-                                              //   FlanzItem(
-                                              //   image: place.image,
-                                              //   name: place.name,
-                                              //   location: place.location,
-                                              //   price: place.price,
-                                              //   aim: place.aim,
-                                              // );
+                                              return FlanzItem(
+                                                  image: place.image,
+                                                  name: place.name,
+                                                  location: place.location,
+                                                  price: place.price,
+                                                  aim: place.aim,
+                                                  onTap: () {
+                                                    placeSearch.selectedPlace =
+                                                        placeSearch
+                                                            .placeList[index];
+                                                    Navigator.pushNamed(context,
+                                                        SearchDetailScreen.id);
+                                                  });
                                             }),
                                       ),
                                     ],
@@ -317,11 +307,11 @@ class HomeScreenWidget extends StatelessWidget {
                                         child: GridView.builder(
                                           padding: EdgeInsets.zero,
                                           gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                              SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight(
                                             crossAxisCount: 2,
                                             mainAxisSpacing: 10,
                                             crossAxisSpacing: 10,
-                                            childAspectRatio: 0.86,
+                                            height: 230,
                                           ),
                                           itemCount: 4,
                                           physics:
@@ -473,28 +463,294 @@ class HomeScreenWidget extends StatelessWidget {
   }
 }
 
-class Popup extends StatelessWidget {
-  const Popup({
+List<Widget> popUpLists = [
+  PopUp1(),
+  PopUp2(),
+];
+
+class PopUp1 extends StatelessWidget {
+  const PopUp1({
     Key key,
-    this.popup,
   }) : super(key: key);
-  final PopupLists popup;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        margin: EdgeInsets.only(right: 10),
-        child: new Image.asset(
-          popup.image,
-          width: 340,
-          fit: BoxFit.cover,
-        ),
+    final user = FirebaseAuth.instance.currentUser;
+    return Container(
+      margin: EdgeInsets.only(right: 20),
+      child: Row(
+        children: [
+          Container(
+            width: 300,
+            height: 234,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                  image: AssetImage('assets/images/popupre1.png'),
+                  fit: BoxFit.cover),
+            ),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 20,
+                  left: 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text.rich(
+                        TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: user.displayName,
+                              style: TextStyle(
+                                  color: Color(0xFF50555C),
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            TextSpan(
+                              text: '님',
+                              style: TextStyle(
+                                  color: Color(0xFF50555C),
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        '음료 발행까지',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xFF50555C),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  left: 200,
+                  child: FlatButton(
+                    padding: EdgeInsets.zero,
+                    child: Container(
+                      height: 30,
+                      width: 86,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: kMainColor,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '확인하기',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 30,
+                  left: 120,
+                  child: Text.rich(
+                    TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: '1',
+                          style: TextStyle(
+                              color: Color(0xFF50555C),
+                              fontWeight: FontWeight.w900,
+                              fontSize: 120),
+                        ),
+                        TextSpan(
+                            text: '장의',
+                            style: TextStyle(
+                              color: Color(0xFF50555C),
+                              fontSize: 26,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 170,
+                  left: 135,
+                  child: Text(
+                    '스티커가 남아습니다',
+                    style: TextStyle(
+                      color: Color(0xFF50555C),
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+class PopUp2 extends StatelessWidget {
+  const PopUp2({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          Container(
+            width: 300,
+            height: 234,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                  image: AssetImage('assets/images/popupre1.png'),
+                  fit: BoxFit.cover),
+            ),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 20,
+                  left: 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'null',
+                        style: TextStyle(
+                            color: Color(0xFF50555C),
+                            fontSize: 26,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      Text(
+                        '음료 발행까지',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xFF50555C),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  left: 200,
+                  child: FlatButton(
+                    padding: EdgeInsets.zero,
+                    child: Container(
+                      height: 30,
+                      width: 86,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: kMainColor,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '확인하기',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 30,
+                  left: 120,
+                  child: Text.rich(
+                    TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: '1',
+                          style: TextStyle(
+                              color: Color(0xFF50555C),
+                              fontWeight: FontWeight.w900,
+                              fontSize: 120),
+                        ),
+                        TextSpan(
+                            text: '장의',
+                            style: TextStyle(
+                              color: Color(0xFF50555C),
+                              fontSize: 26,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 170,
+                  left: 135,
+                  child: Text(
+                    '스티커가 남아습니다',
+                    style: TextStyle(
+                      color: Color(0xFF50555C),
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//oirginal image pop up
+// class Popup extends StatelessWidget {
+//   const Popup({
+//     Key key,
+//     this.popup,
+//   }) : super(key: key);
+//   final PopupLists popup;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return ClipRRect(
+//       borderRadius: BorderRadius.circular(8),
+//       child: Container(
+//         margin: EdgeInsets.only(right: 10),
+//         child: new Image.asset(
+//           popup.image,
+//           width: 340,
+//           fit: BoxFit.cover,
+//         ),
+//       ),
+//     );
+//   }
+// }
+// class Popup extends StatelessWidget {
+//   const Popup({
+//     Key key,
+//     this.popup,
+//   }) : super(key: key);
+//   final PopupLists popup;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return ClipRRect(
+//       borderRadius: BorderRadius.circular(8),
+//       child: Container(
+//         margin: EdgeInsets.only(right: 10),
+//         child: new Image.asset(
+//           popup.image,
+//           width: 340,
+//           fit: BoxFit.cover,
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
 
 class FlanzItem extends StatelessWidget {
   const FlanzItem({
@@ -504,25 +760,19 @@ class FlanzItem extends StatelessWidget {
     @required this.price,
     this.image,
     this.aim,
+    this.onTap,
   }) : super(key: key);
   final String image;
   final String name;
   final String location;
   final int price;
   final int aim;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SearchDetailScreen(value: aim),
-          ),
-        );
-      },
-      padding: EdgeInsets.zero,
+    return GestureDetector(
+      onTap: onTap,
       child: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -621,21 +871,24 @@ class FlanzRightItem extends StatelessWidget {
                 Text(place),
               ],
             ),
-            Container(
-              width: 200,
-              alignment: Alignment.bottomRight,
-              child: Text.rich(
-                TextSpan(
-                  children: <TextSpan>[
+            Center(
+              child: Center(
+                child: Container(
+                  alignment: Alignment.bottomRight,
+                  child: Text.rich(
                     TextSpan(
-                      text: price,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: kMainColor,
-                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: price,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: kMainColor,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -722,18 +975,67 @@ List<ItemRightLists> rightItems = [
   ),
 ];
 
-class PopupLists {
-  final String image;
-  PopupLists({
-    this.image,
-  });
-}
+class SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight
+    extends SliverGridDelegate {
+  /// Creates a delegate that makes grid layouts with a fixed number of tiles in
+  /// the cross axis.
+  ///
+  /// All of the arguments must not be null. The `mainAxisSpacing` and
+  /// `crossAxisSpacing` arguments must not be negative. The `crossAxisCount`
+  /// and `childAspectRatio` arguments must be greater than zero.
+  const SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight({
+    @required this.crossAxisCount,
+    this.mainAxisSpacing = 0.0,
+    this.crossAxisSpacing = 0.0,
+    this.height = 56.0,
+  })  : assert(crossAxisCount != null && crossAxisCount > 0),
+        assert(mainAxisSpacing != null && mainAxisSpacing >= 0),
+        assert(crossAxisSpacing != null && crossAxisSpacing >= 0),
+        assert(height != null && height > 0);
 
-List<PopupLists> popupLists = [
-  PopupLists(
-    image: "assets/images/popup1.png",
-  ),
-  PopupLists(
-    image: "assets/images/popup2.png",
-  ),
-];
+  /// The number of children in the cross axis.
+  final int crossAxisCount;
+
+  /// The number of logical pixels between each child along the main axis.
+  final double mainAxisSpacing;
+
+  /// The number of logical pixels between each child along the cross axis.
+  final double crossAxisSpacing;
+
+  /// The height of the crossAxis.
+  final double height;
+
+  bool _debugAssertIsValid() {
+    assert(crossAxisCount > 0);
+    assert(mainAxisSpacing >= 0.0);
+    assert(crossAxisSpacing >= 0.0);
+    assert(height > 0.0);
+    return true;
+  }
+
+  @override
+  SliverGridLayout getLayout(SliverConstraints constraints) {
+    assert(_debugAssertIsValid());
+    final double usableCrossAxisExtent =
+        constraints.crossAxisExtent - crossAxisSpacing * (crossAxisCount - 1);
+    final double childCrossAxisExtent = usableCrossAxisExtent / crossAxisCount;
+    final double childMainAxisExtent = height;
+    return SliverGridRegularTileLayout(
+      crossAxisCount: crossAxisCount,
+      mainAxisStride: childMainAxisExtent + mainAxisSpacing,
+      crossAxisStride: childCrossAxisExtent + crossAxisSpacing,
+      childMainAxisExtent: childMainAxisExtent,
+      childCrossAxisExtent: childCrossAxisExtent,
+      reverseCrossAxis: axisDirectionIsReversed(constraints.crossAxisDirection),
+    );
+  }
+
+  @override
+  bool shouldRelayout(
+      SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight oldDelegate) {
+    return oldDelegate.crossAxisCount != crossAxisCount ||
+        oldDelegate.mainAxisSpacing != mainAxisSpacing ||
+        oldDelegate.crossAxisSpacing != crossAxisSpacing ||
+        oldDelegate.height != height;
+  }
+}
